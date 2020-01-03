@@ -1,20 +1,4 @@
 {
-   "caretakers": [
-      {
-         "Age": 23,
-         "City": "Bangalore",
-         "Gender": "Male",
-         "Name": "Asif Farhan Khan",
-         "login_id": "ct_7204"
-      }
-   ],
-   "recipients": [
-      {
-         "Age": 82,
-         "City": "Gotham",
-         "Gender": "Male",
-         "Name": "Alfred",
-         "login_id": "rt_6748"
-      }
-   ]
+   "caretakers": [],
+   "recipients": []
 }

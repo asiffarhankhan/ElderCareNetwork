@@ -30,6 +30,8 @@ class register:
         ct['Gender'] = input("GENDER:\t")
         self.login_id = 'ct_'+str(randint(1000,9999))
         ct['login_id'] = self.login_id
+        ct['recipients'] = 0
+        ct['earnings'] = 0
 
         li = self.data['caretakers']
         li.extend([ct])
@@ -51,6 +53,9 @@ class register:
         rt['Gender'] = input("GENDER:\t")
         self.login_id = 'rt_'+str(randint(1000,9999))
         rt['login_id'] = self.login_id
+        rt['caretaker_alloted'] = 'none'
+        rt['funds'] = 0
+
         li = self.data['recipients']
         li.extend([rt])
 
@@ -71,34 +76,77 @@ class login:
         option = int(input("\n\nPLEASE CHOOSE YOUR LOGIN TYPE: \n\n1. Caretaker Login \t 2. Recipient Login \n\nEnter Here: "))
 
         if option == 1:
-            self.CareTaker()
-        else:
-            self.Recipient()
+
+            self.ct_id = input('\n\nPlease Enter your User ID here : ')
+
+            for i in self.data['caretakers']:
+                if i['login_id'] == self.ct_id:
+                    self.ct_data = i
+                    self.CareTaker()
+                    break
+            else:
+                print("ERROR: Please check your login id and try again!")
+                self.__init__()
+
+        elif option == 2:
+
+            self.rt_id = input('\n\nPlease Enter your User ID here : ')
+
+            for i in self.data['recipients']:
+                if i['login_id'] == self.rt_id:
+                    self.rt_data = i
+                    self.Recipient()
+                    break
+                    
+            else:
+                print("ERROR: Please check your login id and try again!")
+                self.__init__()
 
 
     def CareTaker(self):
         
-        self.ct_id = input('\n\nPlease Enter your User ID here : ')
+        os.system('clear')
 
-        for i in self.data['caretakers']:
-            if i['login_id'] == self.ct_id:
-                ct_data = i
+        print("\n\nWelcome {} You have successfully been logged in. \n\nPlease Select a service : \n".format(self.ct_data['Name']))
+        option = int(input('\t1. Volunteer to serve an elder citizen\n\n2. Check Earnings\nEnter Here: '))
 
-        print("\n\nWelcome {} You have successfully been logged in. \nPlease Select a service : \n\n".format(ct_data['Name']))
+        if option == 1:
+            if self.ct_data['recipients'] < 4:
+                os.system('clear')
+                print('\nFollowing are the elder adults that are looking for a service in your area:\n')
+                s_no =1
+                for i in self.data['recipients']:
+                    
+                    if i['City'] == self.ct_data['City']:
+                        print(str(s_no)+'. Name: '+i['Name'],'\nAge: '+str(i['Age']),'\nGender: '+i['Gender']+'\n')
+                        s_no+=1
+
+            else:
+                print("\n\n\tYou have reached the maximum allowed number of service available per user!")
+
 
     def Recipient(self):
 
-        self.rt_id = input('\n\nPlease Enter your User ID here : ')
+        os.system('clear')
 
-        for i in self.data['recipients']:
-            if i['login_id'] == self.rt_id:
-                rt_data = i
+        print("\n\nWelcome {} You have successfully been logged in. \n\nPlease Select a service : \n".format(self.ct_data['Name']))
+        option = int(input('\t1. Choose a CareTaker\n2. Deposit Fund\nEnter Here: '))
 
-        print("\n\nWelcome {} You have successfully been logged in. \nPlease Select a service : \n\n".format(rt_data['Name']))
+        if option == 1:
+            if self.rt_data['funds']>=10000:
+                os.system('clear')
+                print('\nFollowing are the caretakers willing to serve in your area:\n')
+                s_no =1
+                for i in self.data['caretakers']:
+                    if i['City'] == self.rt_data['City']:
+                        print(str(s_no)+'. Name: '+i['Name'],'\nAge: '+str(i['Age']),'\nGender: '+i['Gender']+'\n')
+                        s_no+=1
+
+            else:
+                print("\n\n\tYou need to add funds amounting to 10000 or above before choosing a caretaker")
 
 if __name__ == '__main__':
 
-    
     os.system('clear')
     option = int(input("\n\nWELCOME TO CAREALL! PLEASE SELECT ONE OF THE OPTIONS FROM BELOW TO PROCEED: \n\n\t1. Register \t 2. Login \n\nEnter Here: "))
 
