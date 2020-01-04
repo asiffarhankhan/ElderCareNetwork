@@ -1,6 +1,7 @@
 import os
 import json
 from random import randint
+import time
 
 class register:
 
@@ -58,6 +59,7 @@ class register:
 		rt['caretaker_alloted'] = 'none'
 		rt['funds'] = 0
 		rt['public_id'] = str(randint(1000,9999))
+		rt['caretaking_requests'] = []
 
 		li = self.data['recipients']
 		li.extend([rt])
@@ -122,8 +124,25 @@ class login:
 				print('\nFollowing are the elder adults that are looking for a service in your area:\n')
 				for i in self.data['recipients']:
 					
-					if i['City'] == self.ct_data['City']:
+					if i['City'] == self.ct_data['City'] and i['caretaker_alloted'] == 'none':
 						print(' Name: '+i['Name'],'\n Age: '+str(i['Age']),'\n Gender: '+i['Gender'],'\n Public ID: '+i['public_id']+'\n')
+
+				else:
+					print("\n\nNo available recipients at the moment! Please check back later!\n")
+					print("You will be redirected to your profile in 10 seconds")
+					time.sleep(10)
+					self.CareTaker()
+
+				public_id = input('\nEnter the public_id of a recipient that you\'d like to serve: ')
+
+				for i in self.data['recipients']:
+					if i['public_id'] == public_id and i['public_id'] not in self.ct_data['recipients']:
+						print("\n\n{} will be informed about your interest in his caretaking, Please wait for his approval. Thank you for your service\n\n".format(i['Name']))
+					else:
+						print("\n\nError No such user found!")
+						print("You will be redirected to your profile in 10 seconds")
+						time.sleep(10)
+						self.CareTaker()
 
 			else:
 				print("\n\n\tYou have reached the maximum allowed number of service available per user!")
@@ -145,6 +164,25 @@ class login:
 				for i in self.data['caretakers']:
 					if i['City'] == self.rt_data['City'] and len(i['recipients']) < 4:
 						print(' Name: '+i['Name'],'\n Age: '+str(i['Age']),'\n Gender: '+i['Gender'],'\n Public ID: '+i['public_id']+'\n')
+				
+				public_id = input('\nEnter the public_id of the care taker you are interested to hire: ')
+
+				for i in self.data['caretakers']:
+					if i['public_id'] == public_id:
+						i['recipients'].append(self.rt_data['public_id'])
+						print("Detucting Rs 10000 from you fund...")
+						time.sleep(2)
+						i['earnings'] = 10000
+						self.rt_data['funds'] -= 10000
+						print("Rs 10000 successfully Detucted from your funds!")
+						time.sleep(2)
+						self.rt_data['caretaker_alloted'] = i['Name']
+
+						with open('register.json','w') as file:
+							json.dump(self.data, file, indent=3, sort_keys=True)
+				
+
+						print("\n\nCongratulation! {} have been alloted as your caretaker!\n\n".format(i['Name']))
 
 			else:
 				input("\n\tYou are required to deposit funds amounting to 10000 or above before choosing a caretaker. Press Enter to go back\n")
@@ -156,6 +194,10 @@ class login:
 			funds = int(input("\n\nPease Enter an amount to deposit: Rs. "))
 			self.rt_data['funds'] = funds
 			input("Rs {}\\- has been added in your funds, Please press Enter".format(funds))
+
+			with open('register.json','w') as file:
+				json.dump(self.data, file, indent=3, sort_keys=True)
+
 			self.Recipient()
 
 
