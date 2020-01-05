@@ -2,6 +2,7 @@ import os
 import json
 from random import randint
 import time
+import pandas as pd
 
 class register:
 
@@ -15,7 +16,7 @@ class register:
 
 		if option == 1:
 			self.CareTaker()
-		else:
+		elif option==2:
 			self.Recipient()
 			
 
@@ -34,7 +35,7 @@ class register:
 		ct['recipients'] = []
 		ct['earnings'] = 0
 		ct['public_id'] = str(randint(1000,9999))
-		ct['rating'] = 2.5
+		ct['rating'] = [2.5]
 
 		li = self.data['caretakers']
 		li.extend([ct])
@@ -42,7 +43,10 @@ class register:
 		with open('register.json','w') as file:
 			json.dump(self.data, file, indent=3, sort_keys=True)
 
-		print("\n\tThank you for registering! Your login UserID is: "+self.login_id+'\n\n')
+		print("\n\tThank you for registering! Your login UserID is: "+self.login_id+'\n')
+		print("You will be redirected to your profile in 6 seconds")
+		time.sleep(6)
+		main()
 
 				
 	def Recipient(self):
@@ -61,7 +65,7 @@ class register:
 		rt['funds'] = 0
 		rt['public_id'] = str(randint(1000,9999))
 		rt['caretaking_requests'] = []
-		rt['rating'] = 2.5 
+		rt['rating'] = [2.5]
 
 		li = self.data['recipients']
 		li.extend([rt])
@@ -70,9 +74,12 @@ class register:
 			json.dump(self.data, file, indent=3, sort_keys=True)
 
 		print("\n\tThank you for registering! Your login UserID is: "+self.login_id+'\n\n')
+		print("You will be redirected to your profile in 6 seconds")
+		time.sleep(6)
+		main()
 
 
-class login:
+class dashboard:
 
 	def __init__(self):
 		
@@ -117,7 +124,7 @@ class login:
 		os.system('clear')
 
 		print("\n\nWelcome {} You have successfully been logged in. \n\nPlease Select a service : \n".format(self.ct_data['Name']))
-		option = int(input('\t1. Volunteer to serve an elder citizen\n\n\t2. Check Earnings\n\nEnter Here: '))
+		option = int(input('\t1. Volunteer to serve an elder citizen\n\n\t2. Check Earnings\n\n\t3. Rate your Recipient\n\nEnter Here: '))
 
 		if option == 1:
 
@@ -131,9 +138,10 @@ class login:
 						break
 
 				else:
-					print("\n\nNo available recipients at the moment! Please check back later!\n")
-					print("You will be redirected to your profile in 10 seconds")
-					time.sleep(10)
+					os.system('clear')
+					print("No available recipients at the moment! Please check back later!\n")
+					print("You will be redirected to your profile in 6 seconds")
+					time.sleep(6)
 					self.CareTaker()
 
 				public_id = input('Enter the public_id of a recipient that you\'d like to serve: ')
@@ -151,13 +159,48 @@ class login:
 						self.CareTaker()
 
 					else:
+						os.system('clear')
 						print("\n\nError No such user found!")
-						print("You will be redirected to your profile in 10 seconds")
-						time.sleep(10)
+						print("You will be redirected to your profile in 6 seconds")
+						time.sleep(6)
 						self.CareTaker()
 
 			else:
 				print("\n\n\tYou have reached the maximum allowed number of service available per user!")
+
+		elif option == 2:
+
+			os.system('clear')
+			print("\n\nYou have earned Rs. {} so far, Please continue providing service to keep earning".format(self.ct_data['earnings']))
+			print("You will be redirected to your profile in 6 seconds")
+			time.sleep(6)
+			self.CareTaker()
+
+		elif option == 3:
+
+			os.system('clear')
+			if len(self.ct_data['recipients']) > 0:
+				for i in self.ct_data['recipients']:
+					for j in self.data['recipients']:
+						if i == j['public_id']:
+							rating = int(input("\nPlease rate your service with Mr. {} from a scale of 1 to 5 Stars \n\nEnter Your rating here: ".format(j['Name'])))
+							j['rating'].append(rating)
+
+				print("\nThanks for rating!")
+
+				with open('register.json','w') as file:
+					json.dump(self.data, file, indent=3, sort_keys=True)
+				
+				print("\nYou will be redirected to your profile in 6 seconds")
+				time.sleep(6)
+				self.CareTaker()
+
+			else:
+				os.system('clear')
+				print("\nYou do not currently have any ongoing caretaking service, Please start a service before rating a recipient\n")
+				print("\nYou will be redirected to your profile in 6 seconds")
+				time.sleep(6)
+				self.CareTaker()
 
 
 	def Recipient(self):
@@ -206,7 +249,7 @@ class login:
 									self.Recipient()
 
 		print("\n\nWelcome {} You have successfully been logged in. \n\nPlease Select a service : \n".format(self.rt_data['Name']))
-		option = int(input('\t1. Choose a CareTaker\n\n\t2. Deposit Fund\n\nEnter Here: '))
+		option = int(input('\t1. Choose a CareTaker\n\n\t2. Deposit Fund\n\n\t3. Rate your CareTaker\n\nEnter Here: '))
 
 		if option == 1:
 
@@ -251,13 +294,120 @@ class login:
 				json.dump(self.data, file, indent=3, sort_keys=True)
 			self.Recipient()
 
+		elif option == 3:
+
+			os.system('clear')
+			if self.rt_data['caretaker_alloted'] is not 'none':
+				for i in self.data['caretakers']:
+					if i['public_id'] == self.rt_data['caretaker_alloted']:
+						rating = int(input("\nPlease rate your service with Mr. {} from a scale of 1 to 5 Stars \n\nEnter Your rating here: ".format(i['Name'])))
+						i['rating'].append(rating)
+
+				print("\nThanks for rating!")
+
+				with open('register.json','w') as file:
+					json.dump(self.data, file, indent=3, sort_keys=True)
+				
+				print("\nYou will be redirected to your profile in 6 seconds")
+				time.sleep(6)
+				self.Recipient()
+
+			else:
+				os.system('clear')
+				print("\nYou do not currently have any ongoing caretaking service, Please start a service before rating a caretaker\n")
+				print("\nYou will be redirected to your profile in 6 seconds")
+				time.sleep(6)
+				self.CareTaker()
+
+
+class admin:
+	
+	def __init__(self):
+
+		with open('register.json','r') as self.file:
+			self.data = json.load(self.file)
+
+		os.system('clear')
+		option = int(input("\n\nPLEASE CHOOSE AN OPERATION: \n\n\t1. Check Ongoing Services \t 2. Database \n\nEnter Here: "))
+
+		if option == 1:
+			self.services()
+
+		elif option == 2:
+			self.database()
+
+	def services(self):
+
+		os.system('clear')
+		print('\nFOLLOWING ARE THE ONGOING SERVICES IN CAREALL: \n')
+		for i in self.data['caretakers']:
+			if len(i['recipients']) != 0:
+				for j in i['recipients']:
+					for k in self.data['recipients']:
+						if j == k['public_id']:
+							print("\tMr. {} is taking care of Mr.{}".format(i['Name'],k['Name']))
+
+		count=0
+		print('\nCARETAKERS WHO ARE CURRENTLY IDLE: \n')
+		for i in self.data['caretakers']:
+			if len(i['recipients']) == 0:
+				count+=1
+				print('\tMr. {}'.format(i['Name']))
+
+		
+		if count==0:
+			print('\tThere are currently no idel caretakers\n\n')
+		print("")
+
+		ncount=0
+		print('ELDERLY WHO ARE NOT ASSIGNED A CARETAKER: \n')
+		for i in self.data['recipients']:
+			if i['caretaker_alloted'] == 'none':
+				ncount+=1
+				print('\tMr. {}'.format(i['Name']))
+
+		if ncount==0:
+			print('\tAll elderly are currently assigned to a caretaker')
+		print("\n")
+
+
+	def database(self):
+
+		os.system("clear")
+		print("\nThere are currently {} Users registered with CareAll".format(len(self.data['caretakers'])+len(self.data['recipients'])))
+		print("\n\t- {} CareTakers\n\t- {} recipients\n".format(len(self.data['caretakers']),len(self.data['recipients'])))
+
+		nd = []
+		print("CARETAKER DATABASE\n")
+		for i in self.data['caretakers']:
+			i['rating'] = sum(i['rating'])/len(i['rating'])
+			nd.append(i)
+
+		print(pd.DataFrame(nd))
+		print('')
+
+		nd = []
+		print("Recipient DATABASE\n")
+		for i in self.data['recipients']:
+			i['rating'] = sum(i['rating'])/len(i['rating'])
+			nd.append(i)
+
+		print(pd.DataFrame(nd))
+		print('')
+
 
 if __name__ == '__main__':
 
-	os.system('clear')
-	option = int(input("\n\nWELCOME TO CAREALL! PLEASE SELECT ONE OF THE OPTIONS FROM BELOW TO PROCEED: \n\n\t1. Register \t 2. Login \n\nEnter Here: "))
+	def main():
 
-	if option == 1:
-		register()
-	else:
-		login()
+		os.system('clear')
+		option = int(input("\n\nWELCOME TO CAREALL! PLEASE SELECT ONE OF THE OPTIONS FROM BELOW TO PROCEED: \n\n\t1. Register \t 2. Login \t 3. Admin_Panel\n\nEnter Here: "))
+
+		if option == 1:
+			register()
+		elif option == 2:
+			dashboard()
+		elif option == 3:
+			admin()
+
+	main()
