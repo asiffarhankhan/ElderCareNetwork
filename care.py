@@ -297,7 +297,7 @@ class dashboard:
 		elif option == 3:
 
 			os.system('clear')
-			if self.rt_data['caretaker_alloted'] is not 'none':
+			if self.rt_data['caretaker_alloted'] != 'none':
 				for i in self.data['caretakers']:
 					if i['public_id'] == self.rt_data['caretaker_alloted']:
 						rating = int(input("\nPlease rate your service with Mr. {} from a scale of 1 to 5 Stars \n\nEnter Your rating here: ".format(i['Name'])))
@@ -317,7 +317,7 @@ class dashboard:
 				print("\nYou do not currently have any ongoing caretaking service, Please start a service before rating a caretaker\n")
 				print("\nYou will be redirected to your profile in 6 seconds")
 				time.sleep(6)
-				self.CareTaker()
+				self.Recipient()
 
 
 class admin:
