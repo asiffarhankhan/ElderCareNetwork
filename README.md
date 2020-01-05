@@ -1,6 +1,6 @@
 ElderCareNetwork
 ================
-*CareAll - A network where Retired folks make themselves available for care & young can earn by taking care.*
+*CareAll - A network where retired folks make themselves available for care & youngsters can earn by taking their care.*
 
 ## Problem Statement
 
@@ -12,8 +12,8 @@ ElderCareNetwork
 
 ## Objective
 
-* Design class diagrams using any tool & share the image.
-* Complete Class code for the entire system.
-* Testing the application & show the results
-    - a. Showing who is taking care of older couple.
-    - b. Showing who all a young chap is currently taking care of.
+* Designing class diagrams using any tool.
+* Completing class code for the entire system.
+* Testing the application & showing the following:
+        - who is taking care of older couple.
+        - who all a young chap is currently taking care of.
