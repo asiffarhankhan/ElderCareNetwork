@@ -2,6 +2,9 @@ ElderCareNetwork
 ================
 *CareAll - A network where retired folks make themselves available for care & youngsters can earn by taking their care.*
 
+##Class Diagram
+![CareAll Class Diagram](https://github.com/asiffarhankhan/ElderCareNetwork/blob/master/class%20diagram.jpg)
+
 ## Problem Statement
 
 * Caregiving will be next big industry.
