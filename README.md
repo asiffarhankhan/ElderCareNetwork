@@ -4,7 +4,7 @@ ElderCareNetwork
 
 ## Class Diagram
 
-![CareAll Class Diagram](https://github.com/asiffarhankhan/ElderCareNetwork/blob/master/class%20diagram.jpg)
+![CareAll Class Diagram]()
 
 ## Problem Statement
 
