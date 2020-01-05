@@ -15,5 +15,5 @@ ElderCareNetwork
 * Designing class diagrams using any tool.
 * Completing class code for the entire system.
 * Testing the application & showing the following:
-- who is taking care of older couple.
-- who all a young chap is currently taking care of.
+  - who is taking care of older couple.
+  - who all a young chap is currently taking care of.
